@@ -14,7 +14,7 @@
                 <h3 class="my-0 font-weight-normal"> {{ product.name}}</h3>
                 <div class="card-body">
                   {% if product.photo %}
-                  <img src="{{ product.photo | media_filter }}" style="width: 550px">
+                  <img src="{{ product.photo | media_filter }}" style="width: 550px; height: auto;">
                   {% endif %}
                   <h4 class="card-title pricing-card-title">Цена: {{product.price}} р.</h4>
                   <h6> Описание: {{product.description}}.</h6>
