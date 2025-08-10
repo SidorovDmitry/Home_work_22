@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+{% load my_tags %}
+{% load static %}
+{% block title%}Наши блоги{% endblock %}
+
+{% block content %}
+{% include 'header.html' %}
+
+<div class="container mb-3">
+    <h1>Наши блоги </h1>
+</div>
+
+<div class="row row-cols-md-3 ">
+    {% for blog in object_list %}
+    <div class="col-4 d-flex align-items-stretch">
+        <div class="card w-100 mb-4 box-shadow">
+            <div class="card-header">
+                <h3 class="my-0 font-weight-normal"> {{ blog.name}}</h3>
+            </div>
+            <div class="card-body">
+
+                {% if blog.photo %}
+                <img src="{{ blog.photo | media_filter }}" style="width: 350px">
+                {% else %}
+                <img src="{% static 'images/no_photo.jpg' %}" alt=" . . . " class="img-fluid"/>
+                {% endif %}
+
+                <h5> {{ blog.description | truncatechars:100}}</h5>
+                <h6> Добавлен: {{ blog.created_at | date:"d M Y" }}</h6>
+                <h6> Просмотры: {{ blog.watch_count}}</h6>
+
+            </div>
+            <div class="container mb-3">
+                <a class="btn btn-lg btn-block btn-outline-info" href="/blog_detail/{{blog.pk}}">Подробно</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="container mb-3">
+    <h4>Напиши свой блог </h4>
+    <a class="btn btn-lg btn-block btn-outline-info" href="/blog_create">Начните свой блог</a>
+</div>
+{% endblock %}
