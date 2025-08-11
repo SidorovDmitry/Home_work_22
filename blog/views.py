@@ -33,11 +33,12 @@ class BlogDetailView(DetailView):
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = "__all__"
+    fields = ['name', 'description', 'photo', 'is_published']
+    template_name = 'blog/blog_form.html'
 
     def get_success_url(self):
         """ Перенаправление на страницу созданного блога. """
-        return reverse("blog:blog_detail", args=[self.kwargs.get("pk")])
+        return reverse('blog:blog_detail', kwargs={'pk': self.object.pk})
 
 
 class BlogDeleteView(DeleteView):
