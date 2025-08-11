@@ -31,7 +31,7 @@
 
             </div>
             <div class="container mb-3">
-                <a class="btn btn-lg btn-block btn-outline-info" href="/blog_detail/{{blog.pk}}">Подробно</a>
+                <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'blog:blog_detail' blog.pk %}">Подробно</a>
             </div>
         </div>
     </div>
@@ -40,6 +40,6 @@
 
 <div class="container mb-3">
     <h4>Напиши свой блог </h4>
-    <a class="btn btn-lg btn-block btn-outline-info" href="/blog_create">Начните свой блог</a>
+    <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'blog:blog_create' %}">Начните свой блог</a>
 </div>
 {% endblock %}

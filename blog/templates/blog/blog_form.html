@@ -18,7 +18,7 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="p-2 btn btn-outline-success fixed-size-btn" > Сохранить</button>
-                    <a href="/blog_list/" class="p-2 btn btn-lg btn-block btn-outline-info">Отмена</a>
+                    <a  href="{% url 'blog:blog_list' %}" class="p-2 btn btn-lg btn-block btn-outline-info">Отмена</a>
                 </form>
 
 
