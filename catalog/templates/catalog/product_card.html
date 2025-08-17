@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load my_tags %}
-{% block title %}Карточка товара{% endblock %}
+{% load static %}
+
+{% block title %}{{ product.name }} | Карточка товара{% endblock %}
 
 {% block content %}
-{% include 'header.html' %}
+<div class="container py-4">
+    {% include 'header.html' %}
 
 <h2>Подробное описание продукта</h2>
 
@@ -31,4 +34,21 @@
         </div>
     </div>
 </div>
+
+<style>
+    .fixed-size-btn {
+        min-width: 120px;
+    }
+    .product-details {
+        padding: 0 1rem;
+    }
+    @media (max-width: 768px) {
+        .btn-group {
+            width: 100%;
+        }
+        .btn {
+            flex-grow: 1;
+        }
+    }
+</style>
 {% endblock %}
