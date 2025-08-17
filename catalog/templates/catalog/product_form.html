@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+{% load my_tags %}
+{% block title%}Добавить продукт{% endblock %}
+{% block content %}
+<h2>Добавить продукт</h2>
+
+
+<div class="container ">
+    <div class="col-12">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Здесь Вы можете добавить продукт</h4>
+            </div>
+            <div class="container  text-center">
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="p-2 btn btn-outline-success fixed-size-btn" > Сохранить</button>
+                    <a href="{% url 'catalog:product_catalog' %}"class="p-2 btn btn-lg btn-block btn-outline-info">Отмена</a>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+</div>
+
+
+{% endblock %}
