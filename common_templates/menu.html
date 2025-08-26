@@ -6,5 +6,19 @@
            <a class="p-2 btn btn-outline-primary" href="/contacts">Контакты</a>
            <a class="p-2 btn btn-outline-primary" href="/blog_list">Блог</a>
        </nav>
+       <nav class="ms-5">
+           {% if user.is_authenticated %}
+           <form method="post" action="{% url 'users:logout' %}" style="display: inline;">
+               {% csrf_token %}
+               <button type="submit" class="p-2 btn btn-outline-primary">Выйти</button>
+           </form>
+           <a class="p-2 btn btn-outline-primary" href="{% url 'users:update' %}">Редактировать профиль</a>
+            {% else %}
+
+               <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Войти</a>
+               <a class="p-2 btn btn-outline-primary" href="{% url 'users:register' %}">Регистрация</a>
+
+           {% endif %}
+       </nav>
    </div>
 </menu>
