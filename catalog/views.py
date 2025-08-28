@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DetailView, DeleteView
 from django.views.generic.edit import CreateView, UpdateView
@@ -45,6 +45,8 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
         """ Перенаправление на страницу созданного блога. """
         return reverse("catalog:product_card",  kwargs={'pk': self.object.pk})
 
-class ProductDeleteView(LoginRequiredMixin,DeleteView):
+class ProductDeleteView(LoginRequiredMixin,PermissionRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_catalog')
+    permission_required = 'catalog.delete_products'
+    raise_exception = True
