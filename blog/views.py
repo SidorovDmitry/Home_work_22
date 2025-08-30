@@ -14,26 +14,26 @@ class BlogListView(ListView):
         return Blog.objects.filter(sign_publication=True)
 
 
-class BlogCreateView(LoginRequiredMixin,CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
-    fields = "__all__"
+    fields = ['name', 'description', 'photo', 'sign_publication']  # ИСПРАВЛЕНО
     success_url = reverse_lazy('blog:blog_list')
 
 
-class BlogDetailView(LoginRequiredMixin,DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
 
     def get_object(self, queryset=None):
-        """  Увеличение счётчика просмотров"""
+        """ Увеличение счётчика просмотров """
         self.object = super().get_object(queryset)
         self.object.watch_count += 1
         self.object.save()
         return self.object
 
 
-class BlogUpdateView(LoginRequiredMixin,UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
-    fields = ['name', 'description', 'photo', 'is_published']
+    fields = ['name', 'description', 'photo', 'sign_publication']  # ИСПРАВЛЕНО: is_published → sign_publication
     template_name = 'blog/blog_form.html'
 
     def get_success_url(self):
