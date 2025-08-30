@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Blog
-
+from .forms import BlogForm
 
 class BlogListView(ListView):
     model = Blog
@@ -16,10 +16,13 @@ class BlogListView(ListView):
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
-    fields = ['name', 'description', 'photo', 'sign_publication']  # ИСПРАВЛЕНО
+    form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
 
-
+    def form_valid(self, form):
+        """Автоматически устанавливаем владельца"""
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
 
@@ -32,7 +35,7 @@ class BlogDetailView(LoginRequiredMixin, DetailView):
 
 
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
-    model = Blog
+    model = BlogForm
     fields = ['name', 'description', 'photo', 'sign_publication']  # ИСПРАВЛЕНО: is_published → sign_publication
     template_name = 'blog/blog_form.html'
 
