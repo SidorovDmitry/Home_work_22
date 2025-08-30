@@ -1,45 +1,106 @@
-{% extends 'base.html'%}
-{% load my_tags %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title%}Наши блоги{% endblock %}
+{% block title %}Наши блоги{% endblock %}
 
 {% block content %}
-{% include 'header.html' %}
-
-<div class="container mb-3">
-    <h1>Наши блоги </h1>
-</div>
-
-<div class="row row-cols-md-3 ">
-    {% for blog in object_list %}
-    <div class="col-4 d-flex align-items-stretch">
-        <div class="card w-100 mb-4 box-shadow">
-            <div class="card-header">
-                <h3 class="my-0 font-weight-normal"> {{ blog.name}}</h3>
-            </div>
-            <div class="card-body">
-
-                {% if blog.photo %}
-                <img src="{{ blog.photo | media_filter }}" style="width: 350px">
-                {% else %}
-                <img src="{% static 'images/no_photo.jpg' %}" alt=" . . . " class="img-fluid"/>
-                {% endif %}
-
-                <h5> {{ blog.description | truncatechars:100}}</h5>
-                <h6> Добавлен: {{ blog.created_at | date:"d M Y" }}</h6>
-                <h6> Просмотры: {{ blog.watch_count}}</h6>
-
-            </div>
-            <div class="container mb-3">
-                <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'blog:blog_detail' blog.pk %}">Подробно</a>
-            </div>
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">Наши блоги</h1>
+            <p class="lead text-muted">Читайте самые интересные истории и делитесь своими</p>
         </div>
     </div>
-    {% endfor %}
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for blog in object_list %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h5 class="card-title mb-0">{{ blog.name}}</h5>
+                </div>
+
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3" style="height: 200px; overflow: hidden;">
+                        {% if blog.photo %}
+                        <img src="{{ blog.photo.url }}" class="card-img-top h-100 w-100" alt="{{ blog.name }}"
+                             style="object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/no_photo.jpg' %}" alt="Нет фото"
+                             class="card-img-top h-100 w-100" style="object-fit: cover; opacity: 0.7;">
+                        {% endif %}
+                    </div>
+
+                    <p class="card-text flex-grow-1">{{ blog.description|truncatechars:120 }}</p>
+
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center text-muted small">
+                            <span><i class="bi bi-calendar"></i> {{ blog.created_at|date:"d.m.Y" }}</span>
+                            <span><i class="bi bi-eye"></i> {{ blog.watch_count }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'blog:blog_detail' blog.pk %}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-book"></i> Читать далее
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="bi bi-journal-text" style="font-size: 3rem;"></i>
+                <h3 class="mt-3">Пока нет блогов</h3>
+                <p class="text-muted">Будьте первым, кто поделится своей историей!</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперед</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <div class="text-center mt-5">
+        <div class="border-top pt-4">
+            <h4>Хотите поделиться своей историей?</h4>
+            <p class="text-muted">Напишите свой собственный блог и поделитесь с сообществом</p>
+            <a href="{% url 'blog:blog_create' %}" class="btn btn-success btn-lg">
+                <i class="bi bi-pencil-square"></i> Начать свой блог
+            </a>
+        </div>
+    </div>
 </div>
 
-<div class="container mb-3">
-    <h4>Напиши свой блог </h4>
-    <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'blog:blog_create' %}">Начните свой блог</a>
-</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+    }
+</style>
 {% endblock %}
