@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import CustomUser
+from django.conf import settings
 
 class Category(models.Model):
     """ Модель Category"""
@@ -28,8 +28,8 @@ class Product(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=10, null=True, verbose_name='Цена')
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateField(auto_now=True, verbose_name='Дата последнего изменения')
-    is_published = models.BooleanField(default=True, verbose_name="Опубликовано",help_text="Указывает, опубликован ли товар на сайте. По умолчанию — не опубликован.",)
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Продукты пользователя")
+    is_published = models.BooleanField(default=False, verbose_name="Опубликовано",help_text="Указывает, опубликован ли товар на сайте. По умолчанию — не опубликован.",)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,  verbose_name="Продукты пользователя")
 
     def __str__(self):
         """ Вывод информации"""
