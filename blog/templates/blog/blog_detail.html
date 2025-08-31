@@ -1,45 +1,96 @@
-{% extends 'base.html'%}
-{% load my_tags %}
-{% block title%}{{ blog.name}}{% endblock %}
+{% extends 'base.html' %}
 {% load static %}
+{% block title %}{{ blog.name }}{% endblock %}
+
 {% block content %}
-<h2>Блог</h2>
-<style>.fixed-size-btn {
-    width: 150px;  height: 40px;
-    display: inline-block;  line-height: normal;
-    vertical-align: middle; text-align: center;
-}
-</style>
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'blog:blog_list' %}">Все блоги</a></li>
+            <li class="breadcrumb-item active">{{ blog.name }}</li>
+        </ol>
+    </nav>
 
-<div class="container text-center">
-    <div class="col-12">
-        <div class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal"> {{ blog.name}}</h4>
-            </div>
-            <div class="card-body">
+    <article>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h1 class="h2 mb-0">{{ blog.name }}</h1>
+                    </div>
 
-                {% if blog.photo %}
-                <img src="{{ blog.photo | media_filter }}" style="width: 550px">
-                {% else %}
-                <img src="{% static 'images/no_photo.jpg' %}" alt=" . . . " class="img-fluid"/>
-                {% endif %}
+                    <div class="card-body">
+                        {% if blog.photo %}
+                        <img src="{{ blog.photo.url }}" class="img-fluid rounded mb-4" alt="{{ blog.name }}"
+                             style="max-height: 400px; width: 100%; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-light rounded mb-4 d-flex align-items-center justify-content-center"
+                             style="height: 300px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                        {% endif %}
 
-                <h6> {{ blog.description}}</h6>
-                <h6> Добавлен: {{ blog.created_at | date:"d M Y" }}</h6>
-                <h6> Просмотры: {{ blog.watch_count}}</h6>
+                        <div class="blog-content">
+                            <p class="lead">{{ blog.description }}</p>
+                        </div>
 
-            </div>
-           <div class="container mb-3">
-                <a class="p-1 btn btn-lg btn-block btn-outline-warning fixed-size-btn" href="{% url 'blog:blog_update' blog.pk %}">Редактировать</a>
-                <a class="p-1 btn btn-lg btn-block btn-outline-danger fixed-size-btn" href="{% url 'blog:blog_delete' blog.pk %}" >Удалить</a>
+                        <div class="border-top pt-3 mt-4">
+                            <div class="d-flex justify-content-between align-items-center text-muted small">
+                                <div>
+                                    <i class="bi bi-calendar"></i> Опубликовано: {{ blog.created_at|date:"d.m.Y" }}
+                                </div>
+                                <div>
+                                    <i class="bi bi-eye"></i> Просмотры: {{ blog.watch_count }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="card-footer bg-transparent">
+                        <div class="btn-group w-100">
+                            <a href="{% url 'blog:blog_list' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Назад
+                            </a>
+
+                            {% if perms.blog.change_blog or blog.owner == user %}
+                            <a href="{% url 'blog:blog_update' blog.pk %}" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Редактировать
+                            </a>
+                            {% endif %}
+
+                            {% if perms.blog.delete_blog or blog.owner == user %}
+                            <a href="{% url 'blog:blog_delete' blog.pk %}" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Удалить
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
+    </article>
 </div>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<style>
+    .btn-group .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    @media (max-width: 768px) {
+        .btn-group {
+            flex-direction: column;
+        }
+        .btn-group .btn {
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .blog-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+</style>
 {% endblock %}

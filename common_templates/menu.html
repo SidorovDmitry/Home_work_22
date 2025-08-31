@@ -1,24 +1,63 @@
-<menu>
-   <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-       <h5 class="my-0 mr-md-auto font-weight-normal">Интернет магазин</h5>
-       <nav class="ms-5">
-           <a class="p-2 btn btn-outline-primary" href="/product_catalog">Каталог</a>
-           <a class="p-2 btn btn-outline-primary" href="/contacts">Контакты</a>
-           <a class="p-2 btn btn-outline-primary" href="/blog_list">Блог</a>
-       </nav>
-       <nav class="ms-5">
-           {% if user.is_authenticated %}
-           <form method="post" action="{% url 'users:logout' %}" style="display: inline;">
-               {% csrf_token %}
-               <button type="submit" class="p-2 btn btn-outline-primary">Выйти</button>
-           </form>
-           <a class="p-2 btn btn-outline-primary" href="{% url 'users:update' %}">Редактировать профиль</a>
-            {% else %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'catalog:home' %}">Интернет магазин</a>
 
-               <a class="p-2 btn btn-outline-primary" href="{% url 'users:login' %}">Войти</a>
-               <a class="p-2 btn btn-outline-primary" href="{% url 'users:register' %}">Регистрация</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-           {% endif %}
-       </nav>
-   </div>
-</menu>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'catalog:product_catalog' %}">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'catalog:contacts' %}">Контакты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog:blog_list' %}">Блог</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:update' %}">
+                                    <i class="bi bi-person-gear"></i> Профиль
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right"></i> Выйти
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">
+                            <i class="bi bi-box-arrow-in-right"></i> Войти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:register' %}">
+                            <i class="bi bi-person-plus"></i> Регистрация
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

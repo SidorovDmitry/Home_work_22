@@ -1,32 +1,49 @@
 {% extends 'base.html'%}
 {% load my_tags %}
-{% block title%}Удалить продукт{% endblock %}
+{% block title%}Удалить продукт "{{ product.name }}"{% endblock %}
+
 {% block content %}
-<h3>Удалить продукт</h3>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="my-0 font-weight-normal text-center">
+                        <i class="bi bi-exclamation-triangle"></i> Подтверждение удаления
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="alert alert-warning">
+                        <strong>Внимание!</strong> Это действие нельзя отменить.
+                    </div>
 
-<div class="container ">
-    <div class="col-12">
-        <div class="card mb-4 box-shadow">
-            <div class="card-header bg-danger text-white">
-                <h3 class="my-0 font-weight-normal">! Внимание !</h3>
-            </div>
-            <div class="container  text-center">
-                <h3>Подтвердите удаление "{{product.name}}"</h3>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="p-2 btn btn-outline-danger fixed-size-btn"> Удалить</button>
-                    <a href="/product_card/{{product.pk}}" class="p-2 btn btn-outline-success fixed-size-btn">Отмена</a>
-                </form>
+                    <h4>Вы уверены, что хотите удалить продукт?</h4>
+                    <p class="lead">"{{ product.name }}"</p>
 
+                    {% if perms.catalog.set_published_status %}
+                    <div class="alert alert-info">
+                        <strong>Информация:</strong><br>
+                        Категория: {{ product.category|default:"Не указана" }}<br>
+                        Владелец: {{ product.owner.username|default:"Не указан" }}<br>
+                        Цена: {{ product.price|floatformat:2 }} ₽
+                    </div>
+                    {% endif %}
 
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{% url 'catalog:product_card' product.pk %}"
+                               class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Удалить навсегда
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
 </div>
-
-
 {% endblock %}
