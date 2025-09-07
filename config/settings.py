@@ -146,15 +146,15 @@ LOGIN_URL = "users:login"
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_USE_TLS = True if os.getenv('DEBUG') == 'True' else False
-EMAIL_USE_SSL = True if os.getenv('DEBUG') == 'True' else False
+EMAIL_USE_TLS = True if os.getenv('EMAIL_USE_TLS') == 'True' else False
+EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
-CHAHE_ENABLE = True if os.getenv('DEBUG') == 'True' else False
-if CHAHE_ENABLE:
+CACHE_ENABLED = True if os.getenv('CACHE_ENABLED') == 'True' else False
+if CACHE_ENABLED:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
